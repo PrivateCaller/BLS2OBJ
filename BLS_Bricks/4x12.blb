@@ -1,0 +1,246 @@
+4 12 3
+SPECIAL
+
+uuuu
+XXXX
+dddd
+
+uuuu
+XXXX
+dddd
+
+uuuu
+XXXX
+dddd
+
+uuuu
+XXXX
+dddd
+
+uuuu
+XXXX
+dddd
+
+uuuu
+XXXX
+dddd
+
+uuuu
+XXXX
+dddd
+
+uuuu
+XXXX
+dddd
+
+uuuu
+XXXX
+dddd
+
+uuuu
+XXXX
+dddd
+
+uuuu
+XXXX
+dddd
+
+uuuu
+XXXX
+dddd
+
+1
+
+0 0 0
+4 12 3
+COVERAGE:
+1 : 48
+1 : 48
+1 : 12
+1 : 36
+1 : 12
+1 : 36
+----------------top quads:
+1
+
+TEX:TOP
+POSITION:
+2 6 1.5
+2 -6 1.5
+-2 -6 1.5
+-2 6 1.5
+UV COORDS:
+0 12
+0 0
+4 0
+4 12
+NORMALS:
+0 0 1
+0 0 1
+0 0 1
+0 0 1
+----------------bottom quads:
+5
+
+TEX:BOTTOMLOOP
+POSITION:
+1.5 -5.5 -1.5
+1.5 5.5 -1.5
+-1.5 5.5 -1.5
+-1.5 -5.5 -1.5
+UV COORDS:
+0 0
+0 11
+3 11
+3 0
+NORMALS:
+0 0 -1
+0 0 -1
+0 0 -1
+0 0 -1
+
+TEX:BOTTOMEDGE
+POSITION:
+-2 -6 -1.5
+2 -6 -1.5
+1.5 -5.5 -1.5
+-1.5 -5.5 -1.5
+UV COORDS:
+-0.5 0
+3.5 0
+3 0.5
+0 0.5
+NORMALS:
+0 0 -1
+0 0 -1
+0 0 -1
+0 0 -1
+
+TEX:BOTTOMEDGE
+POSITION:
+2 6 -1.5
+-2 6 -1.5
+-1.5 5.5 -1.5
+1.5 5.5 -1.5
+UV COORDS:
+-0.5 0
+3.5 0
+3 0.5
+0 0.5
+NORMALS:
+0 0 -1
+0 0 -1
+0 0 -1
+0 0 -1
+
+TEX:BOTTOMEDGE
+POSITION:
+2 -6 -1.5
+2 6 -1.5
+1.5 5.5 -1.5
+1.5 -5.5 -1.5
+UV COORDS:
+-0.5 0
+11.5 0
+11 0.5
+0 0.5
+NORMALS:
+0 0 -1
+0 0 -1
+0 0 -1
+0 0 -1
+
+TEX:BOTTOMEDGE
+POSITION:
+-2 6 -1.5
+-2 -6 -1.5
+-1.5 -5.5 -1.5
+-1.5 5.5 -1.5
+UV COORDS:
+-0.5 0
+11.5 0
+11 0.5
+0 0.5
+NORMALS:
+0 0 -1
+0 0 -1
+0 0 -1
+0 0 -1
+----------------north quads:
+1
+
+TEX:SIDE
+POSITION:
+-2 6 1.5
+-2 6 -1.5
+2 6 -1.5
+2 6 1.5
+UV COORDS:
+0.989258 -0.0143229
+0.989258 1.01432
+0.0107422 1.01432
+0.0107422 -0.0143229
+NORMALS:
+0 1 0
+0 1 0
+0 1 0
+0 1 0
+----------------east quads:
+1
+
+TEX:SIDE
+POSITION:
+2 -6 1.5
+2 6 1.5
+2 6 -1.5
+2 -6 -1.5
+UV COORDS:
+0.0179036 -0.0143229
+0.982096 -0.0143229
+0.982096 1.01432
+0.0179036 1.01432
+NORMALS:
+1 0 0
+1 0 0
+1 0 0
+1 0 0
+----------------south quads:
+1
+
+TEX:SIDE
+POSITION:
+2 -6 1.5
+2 -6 -1.5
+-2 -6 -1.5
+-2 -6 1.5
+UV COORDS:
+0.989258 -0.0143229
+0.989258 1.01432
+0.0107422 1.01432
+0.0107422 -0.0143229
+NORMALS:
+0 -1 0
+0 -1 0
+0 -1 0
+0 -1 0
+----------------west quads:
+1
+
+TEX:SIDE
+POSITION:
+-2 -6 -1.5
+-2 6 -1.5
+-2 6 1.5
+-2 -6 1.5
+UV COORDS:
+0.982096 1.01432
+0.0179036 1.01432
+0.0179036 -0.0143229
+0.982096 -0.0143229
+NORMALS:
+-1 0 0
+-1 0 0
+-1 0 0
+-1 0 0
+----------------omni quads:
+0
