@@ -3,13 +3,13 @@ import bpy, bmesh
 from bpy_extras.io_utils import unpack_list
 from bpy_extras import node_shader_utils
 
-def AddTex(Tex): # final command
+def AddTex(blPath, Tex): # final command
     if bpy.data.textures.find(Tex) == -1:
 
         if Tex == 'PRINT':
-            path = os.path.expanduser('~/Documents/Blockland/base/data/shapes//spraycanLabel.png')
+            path = os.path.join(blPath, "base/data/shapes/spraycanLabel.png")
         else:
-            path = os.path.expanduser('~/Documents/Blockland/base/data/shapes/brick'+Tex+'.png')
+            path = os.path.join(blPath, "base/data/shapes/brick" + Tex + ".png")
 
         image = bpy.data.images.load(path)
         text = bpy.data.textures.new(Tex, 'IMAGE')
@@ -102,7 +102,7 @@ def AddUV(NewFace, UV1, UV2, UV3, UV4, Layer, Tex, Angle):
 
     return NewFace
 
-def AddMat(shadeless, obj, Tex, Color='None'):
+def AddMat(normalmap, obj, Tex, Color='None'):
 
     if Color == 'None':
         name = Tex
@@ -131,28 +131,34 @@ def AddMat(shadeless, obj, Tex, Color='None'):
     for node in nodes:
         nodes.remove(node)
 
-    bsdf = nodes.new("ShaderNodeBsdfDiffuse")
-    bsdf2 = nodes.new("ShaderNodeBsdfDiffuse")
-    bsdf.inputs[0].default_value = (float(Color[0]), float(Color[1]), float(Color[2]), float(Color[3]) if float(Color[3]) > 0 else -float(Color[3]))
+    bsdf = nodes.new("ShaderNodeBsdfPrincipled")
+    # bsdf.inputs[0].default_value = (float(Color[0]), float(Color[1]), float(Color[2]), float(Color[3]) if float(Color[3]) > 0 else -float(Color[3]))
 
     # mat.use_shadeless = shadeless
     # mtex.texture_coords = 'UV'
-    mix = nodes.new("ShaderNodeMixShader")
+    mix = nodes.new("ShaderNodeMixRGB")
+    mix.inputs[1].default_value = (float(Color[0]), float(Color[1]), float(Color[2]), float(Color[3]) if float(Color[3]) > 0 else -float(Color[3]))
     node_texture = nodes.new("ShaderNodeTexImage")
     node_texture.image = bpy.data.textures[bpy.data.textures.find(Tex)].image
     node_texture.projection = "BOX"
     # node_texture.coords = 'UV'
     output = nodes.new("ShaderNodeOutputMaterial")
 
+    if normalmap:
+        norm = nodes.new("ShaderNodeBump") # sorry wrapperup
+        norm.inputs[0].default_value = 0.4
+        node_tree.links.new(norm.inputs[2], node_texture.outputs['Alpha'])
+        node_tree.links.new(norm.outputs[0], bsdf.inputs['Normal'])
+
     if(Color == 'None'):
         mat.diffuse_color = (0.5, 0.5, 0.5, 1)
     else:
         mat.diffuse_color = (float(Color[0]), float(Color[1]), float(Color[2]), float(Color[3]) if float(Color[3]) > 0 else -float(Color[3]))
-        node_tree.links.new(bsdf2.inputs['Color'], node_texture.outputs['Color'])
-        node_tree.links.new(mix.inputs[0], node_texture.outputs['Color'])
-        node_tree.links.new(mix.inputs[1], bsdf.outputs['BSDF'])
-        node_tree.links.new(mix.inputs[2], bsdf2.outputs['BSDF'])
-        node_tree.links.new(output.inputs[0], mix.outputs['Shader'])
+        node_tree.links.new(bsdf.inputs['Base Color'], mix.outputs['Color'])
+        node_tree.links.new(mix.inputs[0], node_texture.outputs['Alpha'])
+       # node_tree.links.new(mix.inputs[1], bsdf.outputs['BSDF'])
+        node_tree.links.new(mix.inputs[2], node_texture.outputs['Color'])
+        node_tree.links.new(output.inputs[0], bsdf.outputs['BSDF'])
 
     obj.data.materials.append(mat)
     return
@@ -167,14 +173,17 @@ def SetMat(obj, NewFace, Tex, Color='None'):
     NewFace.material_index = MCount
     return
 
-def AddBrick(filePath, BrickName, PosX, PosY, PosZ, Angle, Color, Print, Rendering, shadeless):
+def AddBrick(blPath, filePath, BrickName, PosX, PosY, PosZ, Angle, Color, Print, Rendering, normalmap, joinbricks):
+    import re
     import os
     import bpy, bmesh
+
+    pattern = re.compile("BLS_*")
 
     if Rendering == 0:
         return
 
-    filepath = os.path.expanduser('~/Documents/Blockland/BLS_Bricks/' + BrickName + '.blb')
+    filepath = os.path.join(blPath + "BLS_Bricks", BrickName + '.blb')
 
     file = open(filepath)
 
@@ -185,8 +194,8 @@ def AddBrick(filePath, BrickName, PosX, PosY, PosZ, Angle, Color, Print, Renderi
         return {'Brick importer does not handle cubic type'}
 
     # mesh, obj
-    mesh = bpy.data.meshes.new(BrickName + '_m') 
-    obj = bpy.data.objects.new(BrickName, mesh)
+    mesh = bpy.data.meshes.new("BLS_" + BrickName + '_m') 
+    obj = bpy.data.objects.new("BLS_" + BrickName, mesh)
     obj.show_transparent = True
     bpy.context.collection.objects.link(obj)
 
@@ -200,7 +209,7 @@ def AddBrick(filePath, BrickName, PosX, PosY, PosZ, Angle, Color, Print, Renderi
         if 'TEX:' in line:
             Tex = line.replace('TEX:','').replace('\n','')
 
-            AddTex(Tex)
+            AddTex(blPath, Tex)
 
             POSH = file.readline().replace('\n','') #Position Header
             POS1 = (' '.join(file.readline().split())).split()
@@ -227,10 +236,10 @@ def AddBrick(filePath, BrickName, PosX, PosY, PosZ, Angle, Color, Print, Renderi
                 C4 = (' '.join(file.readline().split())).split()
                 H = file.readline().replace('\n','') # Normal Header
 
-                AddMat(shadeless, obj, Tex, C1)
+                AddMat(normalmap, obj, Tex, C1)
                 SetMat(obj, NewFace, Tex, C1)
             else:
-                AddMat(shadeless, obj, Tex, Color)
+                AddMat(normalmap, obj, Tex, Color)
                 SetMat(obj, NewFace, Tex, Color)
 
         try:
@@ -256,9 +265,26 @@ def AddBrick(filePath, BrickName, PosX, PosY, PosZ, Angle, Color, Print, Renderi
 
     bpy.ops.object.transform_apply(rotation=True)
     bpy.ops.object.select_all(action='TOGGLE')
+
+    if joinbricks:
+        for ob in bpy.context.visible_objects:
+            if ob.type != 'MESH':
+                continue
+
+            match = pattern.match(ob.name)
+            if match == None:
+                print("no match for %s"  % ob.name)
+            else:
+                print("matched %s" % match.group())
+                ob.select_set(True)
+
+        bpy.ops.object.join()
+        # deselect everything before the next iteration
+        bpy.ops.object.select_all(action='DESELECT')
+        
     return
 
-def ImportBLS(filePath, shadeless=1, centerz=0):
+def ImportBLS(blPath, filePath, joinbricks=1, normalmap=0, centerz=0):
     linecount = 0
 
     file = open(filePath)
@@ -300,9 +326,9 @@ def ImportBLS(filePath, shadeless=1, centerz=0):
                 COL = SaveLine[1].split()[10] #Colliding 11
                 REN = SaveLine[1].split()[11] #Rendering 12
 
-                AddBrick(filePath, NAME,
+                AddBrick(blPath, filePath, NAME,
                 POSX, POSY, POSZ,
-                ANGLE, col[int(COLOR)], PRINT, int(REN), shadeless)
+                ANGLE, col[int(COLOR)], PRINT, int(REN), normalmap, joinbricks)
         try:
             line = file.readline()
         except StopIteration:

@@ -19,10 +19,23 @@ else:
 
 # ImportHelper is a helper class, defines filename and
 # invoke() function which calls the file selector.
+from os.path import basename, dirname
 from bpy_extras.io_utils import ImportHelper
 from bpy.props import StringProperty, BoolProperty, EnumProperty
-from bpy.types import Operator
+from bpy.types import Operator, AddonPreferences
 
+
+class BLSAddonPreferences(AddonPreferences):
+    bl_idname = basename(dirname(__file__))
+
+    filepath: StringProperty(
+        name="Blockland Directory",
+        subtype='FILE_PATH',
+    )
+
+    def draw(self, context):
+        layout = self.layout
+        layout.prop(self, "filepath")
 
 class Import_bls_class(Operator, ImportHelper):
     """Load a Blockland save (.bls) file"""
@@ -37,10 +50,16 @@ class Import_bls_class(Operator, ImportHelper):
             options={'HIDDEN'},
             )
 
-    shadeless = BoolProperty(
-            name="Shadeless Materials",
-            description="Shadeless materials",
+    joinbricks = BoolProperty(
+            name="Join Brick Meshes",
+            description="Join every brick mesh one by one (possible performance improvement?)",
             default=True,
+            )
+
+    normalmap = BoolProperty(
+            name="Use Normal Maps",
+            description="For aesthetic purposes",
+            default=False,
             )
 
     centerz = BoolProperty(
@@ -50,8 +69,10 @@ class Import_bls_class(Operator, ImportHelper):
             )
 
     def execute(self, context):
+        preferences = context.preferences
+        addon_prefs = preferences.addons[__name__].preferences
         from . import import_bls
-        import_bls.ImportBLS(self.filepath, self.shadeless, self.centerz)
+        import_bls.ImportBLS(addon_prefs.filepath, self.filepath, self.joinbricks, self.normalmap, self.centerz)
         return {'FINISHED'}
 
 # Only needed if you want to add into a dynamic menu
@@ -59,6 +80,7 @@ def menu_func_import(self, context):
     self.layout.operator(Import_bls_class.bl_idname, text="Blockland save (.bls)")
 
 classes = (
+    BLSAddonPreferences,
     Import_bls_class,
 )
 
