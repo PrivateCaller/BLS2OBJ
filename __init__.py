@@ -39,7 +39,7 @@ class BLSAddonPreferences(AddonPreferences):
         layout.prop(self, "filepath")
 
 class Import_bls_class(Operator, ImportHelper):
-    """Load a Blockland save (.bls) file"""
+    """Load a Blockland Save (.bls) file"""
     bl_idname = "import_mesh.bls"
     bl_label = "Import BLS"
 
@@ -78,7 +78,7 @@ class Import_bls_class(Operator, ImportHelper):
 
 # Only needed if you want to add into a dynamic menu
 def menu_func_import(self, context):
-    self.layout.operator(Import_bls_class.bl_idname, text="Blockland save (.bls)")
+    self.layout.operator(Import_bls_class.bl_idname, text="Blockland Save (.bls)")
 
 classes = (
     BLSAddonPreferences,
