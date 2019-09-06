@@ -1,4 +1,4 @@
-# io-mesh-bls
+# io_mesh_bls
 Blockland save importer
 
 Originally made by siba, updated for 2.8 by Ahead
@@ -7,7 +7,7 @@ Originally made by siba, updated for 2.8 by Ahead
 
 ## Instructions
 
-* [Download the add-on](https://github.com/Ahe4d/io-mesh-bls/archive/master.zip)
+* [Download the add-on](https://github.com/Ahe4d/io_mesh_bls/archive/master.zip)
 * Install the add-on
 * Copy the BLS_Bricks folder from the .zip into the **root** of your Blockland folder.
 * Find your save file in the open dialog, open
