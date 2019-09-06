@@ -8,6 +8,7 @@ def AddTex(blPath, Tex): # final command
 
         if Tex == 'PRINT':
             path = os.path.join(blPath, "base/data/shapes/spraycanLabel.png")
+            print("Print textures are not implemented in the importer yet, replacing with spray can (don't spray your face)")
         else:
             path = os.path.join(blPath, "base/data/shapes/brick" + Tex + ".png")
 
@@ -184,6 +185,7 @@ def AddBrick(blPath, filePath, BrickName, PosX, PosY, PosZ, Angle, Color, Print,
         return
 
     filepath = os.path.join(blPath + "BLS_Bricks", BrickName + '.blb')
+    
 
     file = open(filepath)
 
@@ -241,6 +243,8 @@ def AddBrick(blPath, filePath, BrickName, PosX, PosY, PosZ, Angle, Color, Print,
             else:
                 AddMat(normalmap, obj, Tex, Color)
                 SetMat(obj, NewFace, Tex, Color)
+            
+            print("Created mesh for brick %s!" % BrickName)
 
         try:
             line = file.readline()
@@ -273,9 +277,9 @@ def AddBrick(blPath, filePath, BrickName, PosX, PosY, PosZ, Angle, Color, Print,
 
             match = pattern.match(ob.name)
             if match == None:
-                print("no match for %s"  % ob.name)
+                print("No match for %s"  % ob.name)
             else:
-                print("matched %s" % match.group())
+                print("Found matched object %s!" % match.group())
                 ob.select_set(True)
 
         bpy.ops.object.join()
@@ -286,7 +290,12 @@ def AddBrick(blPath, filePath, BrickName, PosX, PosY, PosZ, Angle, Color, Print,
 
 def ImportBLS(blPath, filePath, joinbricks=1, normalmap=0, centerz=0):
     linecount = 0
-
+    print("------[BLS Importer]------")
+    print("Blockland directory: %s" % blPath)
+    print("Save file: %s" % filePath)
+    print("Join Brick Meshes: %s" % joinbricks)
+    print("Use Normal Maps: %s" % normalmap)
+    print("Center Z: %s" % centerz)
     file = open(filePath)
     line = file.readline() #This is a Blockland save file.  You probably shouldn't modify it cause you'll screw it up.
     DescCount = file.readline() #Description Count
@@ -298,6 +307,7 @@ def ImportBLS(blPath, filePath, joinbricks=1, normalmap=0, centerz=0):
     if linecount == 0:
         for c in range(0,64):
             col.append(file.readline().split())
+            print("Read color %s!" % c)
 
     while line:
         if 'Linecount' in line:
@@ -332,6 +342,7 @@ def ImportBLS(blPath, filePath, joinbricks=1, normalmap=0, centerz=0):
         try:
             line = file.readline()
         except StopIteration:
+            print("Reached end of file!")
             break
 
     starter = 0
