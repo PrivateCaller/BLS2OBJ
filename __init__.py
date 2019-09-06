@@ -30,8 +30,8 @@ class BLSAddonPreferences(AddonPreferences):
     bl_idname = basename(dirname(__file__))
 
     filepath: StringProperty(
-        name: "Blockland Directory",
-        subtype: 'FILE_PATH',
+        name = "Blockland Directory",
+        subtype = 'FILE_PATH',
     )
 
     def draw(self, context):
@@ -46,27 +46,27 @@ class Import_bls_class(Operator, ImportHelper):
     # ImportHelper mixin class uses this
     filename_ext = ".bls"
 
-    filter_glob = StringProperty(
-            default: "*.bls",
-            options: {'HIDDEN'},
+    filter_glob: StringProperty(
+            default = "*.bls",
+            options = {'HIDDEN'},
             )
 
-    joinbricks = BoolProperty(
-            name: "Join Brick Meshes",
-            description: "Join every brick mesh one by one (possible performance improvement?)",
-            default: True,
+    joinbricks: BoolProperty(
+            name = "Join Brick Meshes",
+            description = "Join every brick mesh one by one (possible performance improvement?)",
+            default = True,
             )
 
-    normalmap = BoolProperty(
-            name: "Use Normal Maps",
-            description: "For aesthetic purposes",
-            default: False,
+    normalmap: BoolProperty(
+            name = "Use Normal Maps",
+            description = "For aesthetic purposes",
+            default = False,
             )
 
-    centerz = BoolProperty(
-            name: "Center Z",
-            description: "Center Z axis of loaded build",
-            default: False,
+    centerz: BoolProperty(
+            name = "Center Z",
+            description = "Center Z axis of loaded build",
+            default = False,
             )
 
     def execute(self, context):

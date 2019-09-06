@@ -244,7 +244,7 @@ def AddBrick(blPath, filePath, BrickName, PosX, PosY, PosZ, Angle, Color, Print,
                 AddMat(normalmap, obj, Tex, Color)
                 SetMat(obj, NewFace, Tex, Color)
             
-            print("Created mesh for brick %s!" % BrickName)
+            
 
         try:
             line = file.readline()
@@ -252,6 +252,7 @@ def AddBrick(blPath, filePath, BrickName, PosX, PosY, PosZ, Angle, Color, Print,
             break
 
     file.close()
+    print("Created mesh for brick %s!" % BrickName)
     bmesh.to_mesh(mesh)
 
     bpy.ops.object.select_all(action='DESELECT')
