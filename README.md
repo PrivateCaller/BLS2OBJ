@@ -8,7 +8,7 @@ Originally made by siba, updated for 2.8 by Ahead
 ## Instructions
 
 * [Download the add-on](https://github.com/Ahe4d/io_mesh_bls/archive/master.zip) and install it in Edit > Preferences > Add-Ons
-* In the add-on dropdown, set your Blockland directory
+* Set your Blockland directory in the add-on drop-down config
 * Copy the BLS_Bricks folder from the .zip into the **root** of your Blockland folder you specified in the config
 * Find your save file in the open dialog, open
 * ???
