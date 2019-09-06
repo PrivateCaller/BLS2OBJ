@@ -2,12 +2,13 @@ bl_info = {
     "name": "Blockland save (.bls) format",
     "author": "siba, adapted for 2.8 by Ahead",
     "blender": (2, 80, 0),
+    "version": (0, 2, 1),
     "location": "File > Import",
     "description": "Import Blockland saves",
     "warning": "",
     "wiki_url": "",
     "tracker_url": "",
-    "support": 'OFFICIAL',
+    "support": 'COMMUNITY',
     "category": "Import-Export"}
 
 if "bpy" in locals():
