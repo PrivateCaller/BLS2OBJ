@@ -179,7 +179,7 @@ def SetMat(obj, NewFace, Tex, Color='None'):
     NewFace.material_index = MCount
     return
 
-def AddBrick(blPath, filePath, BrickName, PosX, PosY, PosZ, Angle, Color, Print, Rendering, normalmap, joinbricks, saveName):
+def AddBrick(blPath, filePath, BrickName, PosX, PosY, PosZ, Angle, Color, Print, Rendering, normalmap, joinbricks, BLSCol):
     import re
 
     pattern = re.compile("BLS_*")
@@ -202,7 +202,7 @@ def AddBrick(blPath, filePath, BrickName, PosX, PosY, PosZ, Angle, Color, Print,
     mesh = bpy.data.meshes.new("BLS_" + BrickName + '_m') 
     obj = bpy.data.objects.new("BLS_" + BrickName, mesh)
     obj.show_transparent = True
-    bpy.context.scene.collection.children[saveName].objects.link(obj)
+    BLSCol.objects.link(obj)
 
     # bmesh
     bmesh.new()
@@ -300,7 +300,8 @@ def ImportBLS(blPath, filePath, joinbricks=1, normalmap=0, centerz=0):
     print("Join Brick Meshes: %s" % joinbricks)
     print("Use Normal Maps: %s" % normalmap)
     print("Center Z: %s" % centerz)
-    bpy.ops.collection.create(name=saveName)
+    BLSCol = bpy.data.collections.new(saveName)
+    bpy.context.scene.collection.children.link(BLSCol)
     file = open(filePath)
     line = file.readline() #This is a Blockland save file.  You probably shouldn't modify it cause you'll screw it up.
     DescCount = file.readline() #Description Count
@@ -343,7 +344,7 @@ def ImportBLS(blPath, filePath, joinbricks=1, normalmap=0, centerz=0):
 
                 AddBrick(blPath, filePath, NAME,
                 POSX, POSY, POSZ,
-                ANGLE, col[int(COLOR)], PRINT, int(REN), normalmap, joinbricks, saveName)
+                ANGLE, col[int(COLOR)], PRINT, int(REN), normalmap, joinbricks, BLSCol)
         try:
             line = file.readline()
         except StopIteration:
