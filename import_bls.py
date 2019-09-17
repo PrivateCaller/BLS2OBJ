@@ -181,7 +181,7 @@ def SetMat(obj, NewFace, Tex, Color='None'):
 
 def AddBrick(blPath, filePath, BrickName, PosX, PosY, PosZ, Angle, Color, Print, Rendering, normalmap, joinbricks, BLSCol):
     import re
-
+    import bmesh
     pattern = re.compile("BLS_*")
 
     if Rendering == 0:
