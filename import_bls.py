@@ -205,6 +205,7 @@ def AddBrick(blPath, filePath, BrickName, PosX, PosY, PosZ, Angle, Color, Print,
     BLSCol.objects.link(obj)
 
     # bmesh
+    global bmesh
     bmesh.new()
     bmesh.from_mesh(mesh)
     Layer = bmesh.loops.layers.uv.new()
