@@ -1,7 +1,12 @@
 import os
 import bpy, bmesh
+import ntpath
 from bpy_extras.io_utils import unpack_list
 from bpy_extras import node_shader_utils
+
+def path_leaf(path):
+    head, tail = ntpath.split(path)
+    return tail or ntpath.basename(head)
 
 def AddTex(blPath, Tex): # final command
     if bpy.data.textures.find(Tex) == -1:
@@ -174,7 +179,7 @@ def SetMat(obj, NewFace, Tex, Color='None'):
     NewFace.material_index = MCount
     return
 
-def AddBrick(blPath, filePath, BrickName, PosX, PosY, PosZ, Angle, Color, Print, Rendering, normalmap, joinbricks):
+def AddBrick(blPath, filePath, BrickName, PosX, PosY, PosZ, Angle, Color, Print, Rendering, normalmap, joinbricks, saveName):
     import re
     import os
     import bpy, bmesh
@@ -199,7 +204,7 @@ def AddBrick(blPath, filePath, BrickName, PosX, PosY, PosZ, Angle, Color, Print,
     mesh = bpy.data.meshes.new("BLS_" + BrickName + '_m') 
     obj = bpy.data.objects.new("BLS_" + BrickName, mesh)
     obj.show_transparent = True
-    bpy.context.collection.objects.link(obj)
+    bpy.context.scene.collection.children[saveName].objects.link(obj)
 
     # bmesh
     global bmesh
@@ -291,12 +296,14 @@ def AddBrick(blPath, filePath, BrickName, PosX, PosY, PosZ, Angle, Color, Print,
 
 def ImportBLS(blPath, filePath, joinbricks=1, normalmap=0, centerz=0):
     linecount = 0
+    saveName = path_leaf(filePath).replace('.bls', '')
     print("------[BLS Importer]------")
     print("Blockland directory: %s" % blPath)
     print("Save file: %s" % filePath)
     print("Join Brick Meshes: %s" % joinbricks)
     print("Use Normal Maps: %s" % normalmap)
     print("Center Z: %s" % centerz)
+    bpy.ops.collection.create(name=saveName)
     file = open(filePath)
     line = file.readline() #This is a Blockland save file.  You probably shouldn't modify it cause you'll screw it up.
     DescCount = file.readline() #Description Count
@@ -339,7 +346,7 @@ def ImportBLS(blPath, filePath, joinbricks=1, normalmap=0, centerz=0):
 
                 AddBrick(blPath, filePath, NAME,
                 POSX, POSY, POSZ,
-                ANGLE, col[int(COLOR)], PRINT, int(REN), normalmap, joinbricks)
+                ANGLE, col[int(COLOR)], PRINT, int(REN), normalmap, joinbricks, saveName)
         try:
             line = file.readline()
         except StopIteration:
