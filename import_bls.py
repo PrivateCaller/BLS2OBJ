@@ -184,7 +184,7 @@ def AddBrick(blPath, filePath, BrickName, PosX, PosY, PosZ, Angle, Color, Print,
     import os
     import bpy, bmesh
 
-    BrickName = Brickname.replace('�', '°')
+    BrickName = BrickName.replace('�', '°')
     pattern = re.compile("BLS_*")
 
     if Rendering == 0:
