@@ -5,7 +5,7 @@
 from sys import argv
 from os.path import splitext, basename, sep
 from os.path import join as path_join
-import bpy, time, itertools
+import bpy, time
 
 def GetPureFilename(path):
     return basename(splitext(path)[0])
