@@ -21,7 +21,7 @@ def AddFace(bmesh, POS1, POS2, POS3, POS4):
     Vert3 = bmesh.verts.new(POS3)
     Vert4 = bmesh.verts.new(POS4)
 
-    return bmesh.faces.new( (Vert1,Vert2,Vert3,Vert4) )
+    return bmesh.faces.new((Vert1, Vert2, Vert3, Vert4))
 
 def AddBrick(brick_name, pos_x, pos_y, pos_z, angle, collision, blb_folder, bls_collection):
     import bmesh
@@ -49,10 +49,10 @@ def AddBrick(brick_name, pos_x, pos_y, pos_z, angle, collision, blb_folder, bls_
             #Found a position header in the BLB file, copy the verticies and apply them to the mesh as a face.
             #UVs and Normals are ignored to save processing time and far more importantly, RAM.
             if 'POSITION:' in line:
-                POS1 = (' '.join(file.readline().split())).split()
-                POS2 = (' '.join(file.readline().split())).split()
-                POS3 = (' '.join(file.readline().split())).split()
-                POS4 = (' '.join(file.readline().split())).split()
+                POS1 = [vertice for vertice in file.readline().split(' ') if vertice]
+                POS2 = [vertice for vertice in file.readline().split(' ') if vertice]
+                POS3 = [vertice for vertice in file.readline().split(' ') if vertice]
+                POS4 = [vertice for vertice in file.readline().split(' ') if vertice]
                 AddFace(bm, POS1, POS2, POS3, POS4)
 
     bm.to_mesh(mesh) #Inject the faces from the bmesh into out bpy.data mesh.
@@ -61,10 +61,10 @@ def AddBrick(brick_name, pos_x, pos_y, pos_z, angle, collision, blb_folder, bls_
     #Ditching the "bpy.ops.transform" calls significantly speeds up the program, but ditching all "bpy.ops" calls
     #makes processing Pyramid drop from 2 hours and 10 minutes to 55 seconds.
     obj.rotation_mode = 'XYZ'
-    obj.rotation_euler[2] += (-1.5708)*float(angle)*-1
-    obj.location.x += float(pos_x)*2
-    obj.location.y += float(pos_y)*2
-    obj.location.z += float(pos_z)*2
+    obj.rotation_euler[2] += (-1.5708) * float(angle) * -1
+    obj.location.x += float(pos_x) * 2
+    obj.location.y += float(pos_y) * 2
+    obj.location.z += float(pos_z) * 2
 
     #print(f"Processed {brick_name}")
 
@@ -109,12 +109,12 @@ def ImportBLS(bls_file, blb_folder):
 
     for ob in bpy.data.objects:
         if starter == 0:
-            PosX = ob.location[0] + ob.dimensions[0]/2
-            PosX2 = ob.location[0] - ob.dimensions[0]/2
-            PosY = ob.location[1] + ob.dimensions[1]/2
-            PosY2 = ob.location[1] - ob.dimensions[1]/2
-            PosZ = ob.location[2] + ob.dimensions[2]/2
-            PosZ2 = ob.location[2] - ob.dimensions[2]/2
+            PosX = ob.location[0] + ob.dimensions[0] / 2
+            PosX2 = ob.location[0] - ob.dimensions[0] / 2
+            PosY = ob.location[1] + ob.dimensions[1] / 2
+            PosY2 = ob.location[1] - ob.dimensions[1] / 2
+            PosZ = ob.location[2] + ob.dimensions[2] / 2
+            PosZ2 = ob.location[2] - ob.dimensions[2] / 2
             starter = 1
         else:
             if ob.location[0] + ob.dimensions[0]/2 > PosX:
